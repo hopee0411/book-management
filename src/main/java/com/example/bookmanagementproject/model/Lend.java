@@ -6,26 +6,32 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.util.List;
+import java.time.Instant;
 
 @Getter
 @Setter
 @Entity
-@Table(name = "book")
-public class Book {
+@Table(name = "lend")
+public class Lend {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-    private String isbn;
+
+    private Instant startOn;//대출시작
+
+    private Instant dueOn;//대출종료
+
+    @Enumerated(EnumType.STRING)
+    private LendStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "author_id")
+    @JoinColumn(name = "book_id")
     @JsonManagedReference
-    private Author author;
+    private Book book;
 
-    @JsonBackReference
-    @OneToMany(mappedBy = "book", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<Lend> lends;
-
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    @JsonManagedReference
+    private Member member;
 }
