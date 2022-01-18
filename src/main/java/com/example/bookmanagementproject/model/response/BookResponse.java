@@ -18,11 +18,9 @@ public class BookResponse {
         this.id = book.getId();
         this.name = book.getName();
         this.isbn = book.getIsbn();
-
-        this.author = Author.builder()
-                .id(book.getAuthor().getId())
-                .firstName(book.getAuthor().getFirstName())
-                .lastName(book.getAuthor().getLastName());
+        this.author.setId(book.getAuthor().getId());
+        this.author.setFirstName(book.getAuthor().getFirstName());
+        this.author.setLastName(book.getAuthor().getLastName());
     }
 
 
