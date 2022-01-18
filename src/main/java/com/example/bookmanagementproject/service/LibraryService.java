@@ -6,6 +6,7 @@ import com.example.bookmanagementproject.model.request.AuthorCreationRequest;
 import com.example.bookmanagementproject.model.request.BookCreationRequest;
 import com.example.bookmanagementproject.model.request.BookLendRequest;
 import com.example.bookmanagementproject.model.request.MemberCreationRequest;
+import com.example.bookmanagementproject.model.response.BookResponse;
 import com.example.bookmanagementproject.repository.AuthorRepository;
 import com.example.bookmanagementproject.repository.BookRepository;
 import com.example.bookmanagementproject.repository.LendRepository;
@@ -32,12 +33,14 @@ public class LibraryService{
     private final LendRepository lendRepository;
     private final BookRepository bookRepository;
 
-    public Book readBook(Long id) {
+    public BookResponse readBook(Long id) {
 
         Optional<Book> book = bookRepository.findById(id);
-//        if (book.isPresent()){
-//            return book.get();
-//        }
+        BookResponse bookResponse = new BookResponse();
+        if (book.isPresent()){
+            bookResponse.BookResponse(book.get());
+            return bookResponse;
+        }
         throw new EntityNotFoundException("Cant find any book under given ID");
     }
 
@@ -53,7 +56,7 @@ public class LibraryService{
         throw new EntityNotFoundException("Cant find any book under given ISBN");
     }
 
-    public Book createBook(BookCreationRequest book) {
+    public BookResponse createBook(BookCreationRequest book) {
         Optional<Author> author = authorRepository.findById(book.getAuthorId());
         if(!author.isPresent()){
             throw new EntityNotFoundException("Author Not Found");
@@ -61,7 +64,12 @@ public class LibraryService{
         Book bookToCreate = new Book();
         BeanUtils.copyProperties(book, bookToCreate);
         bookToCreate.setAuthor(author.get());
-        return bookRepository.save(bookToCreate);
+//        return bookRepository.save(bookToCreate);
+        BookResponse bookResponse = new BookResponse();
+        System.out.println("***" + bookRepository.save(bookToCreate).getAuthor().getId());
+        bookResponse.BookResponse(bookRepository.save(bookToCreate));
+
+        return bookResponse;
 
     }
 

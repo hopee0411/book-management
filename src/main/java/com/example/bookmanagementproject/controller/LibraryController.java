@@ -7,6 +7,7 @@ import com.example.bookmanagementproject.model.request.AuthorCreationRequest;
 import com.example.bookmanagementproject.model.request.BookCreationRequest;
 import com.example.bookmanagementproject.model.request.BookLendRequest;
 import com.example.bookmanagementproject.model.request.MemberCreationRequest;
+import com.example.bookmanagementproject.model.response.BookResponse;
 import com.example.bookmanagementproject.service.LibraryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +32,14 @@ public class LibraryController {
     }
 
     @GetMapping("/book/{bookId}")
-    public ResponseEntity<Book> readBook (@PathVariable Long bookId) {
+    public BookResponse readBook (@PathVariable Long bookId) {
 
-        return ResponseEntity.ok(libraryService.readBook(bookId));
+        return libraryService.readBook(bookId);
     }
 
     @PostMapping("/book")
-    public ResponseEntity<Book> createBook(@RequestBody BookCreationRequest request){
-        return ResponseEntity.ok(libraryService.createBook(request));
+    public BookResponse createBook(@RequestBody BookCreationRequest request){
+        return libraryService.createBook(request);
     }
 
     @DeleteMapping("/book/{bookId}")

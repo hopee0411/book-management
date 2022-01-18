@@ -23,19 +23,11 @@ public class BookResponse {
         this.author.setLastName(book.getAuthor().getLastName());
     }
 
-
     @Getter
     @Setter
     static class Author {
         private Long id;
         private String firstName;
         private String lastName;
-
-        @Builder
-        public Author(Long id, String firstName, String lastName){
-            this.id = id;
-            this.firstName = firstName;
-            this.lastName = lastName;
-        }
     }
 }
