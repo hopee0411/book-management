@@ -1,20 +1,19 @@
 package com.example.bookmanagementproject.model.response;
 
+import com.example.bookmanagementproject.model.Author;
 import com.example.bookmanagementproject.model.Book;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @NoArgsConstructor
-public class BookResponse {
+public class BookResponseDto {
     private Long id;
     private String name;
     private String isbn;
-    private Author author;
+    private AuthorResponseDto author=new AuthorResponseDto();
 
-    public void BookResponse(Book book){
+    public BookResponseDto(Book book) {
         this.id = book.getId();
         this.name = book.getName();
         this.isbn = book.getIsbn();
@@ -22,12 +21,10 @@ public class BookResponse {
         this.author.setFirstName(book.getAuthor().getFirstName());
         this.author.setLastName(book.getAuthor().getLastName());
     }
+//
+//    public void BookResponse(Book book){
+//
+//    }
 
-    @Getter
-    @Setter
-    static class Author {
-        private Long id;
-        private String firstName;
-        private String lastName;
-    }
+
 }

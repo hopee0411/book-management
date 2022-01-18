@@ -6,7 +6,7 @@ import com.example.bookmanagementproject.model.request.AuthorCreationRequest;
 import com.example.bookmanagementproject.model.request.BookCreationRequest;
 import com.example.bookmanagementproject.model.request.BookLendRequest;
 import com.example.bookmanagementproject.model.request.MemberCreationRequest;
-import com.example.bookmanagementproject.model.response.BookResponse;
+import com.example.bookmanagementproject.model.response.BookResponseDto;
 import com.example.bookmanagementproject.repository.AuthorRepository;
 import com.example.bookmanagementproject.repository.BookRepository;
 import com.example.bookmanagementproject.repository.LendRepository;
@@ -17,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import javax.transaction.Transactional;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -27,19 +28,19 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class LibraryService{
     private final AuthorRepository authorRepository;
     private final MemberRepository memberRepository;
     private final LendRepository lendRepository;
     private final BookRepository bookRepository;
 
-    public BookResponse readBook(Long id) {
+    public BookResponseDto readBook(Long id) {
 
         Optional<Book> book = bookRepository.findById(id);
-        BookResponse bookResponse = new BookResponse();
+        BookResponseDto bookResponseDto = new BookResponseDto(book.get());
         if (book.isPresent()){
-            bookResponse.BookResponse(book.get());
-            return bookResponse;
+            return bookResponseDto;
         }
         throw new EntityNotFoundException("Cant find any book under given ID");
     }
@@ -56,7 +57,7 @@ public class LibraryService{
         throw new EntityNotFoundException("Cant find any book under given ISBN");
     }
 
-    public BookResponse createBook(BookCreationRequest book) {
+    public BookResponseDto createBook(BookCreationRequest book) {
         Optional<Author> author = authorRepository.findById(book.getAuthorId());
         if(!author.isPresent()){
             throw new EntityNotFoundException("Author Not Found");
@@ -65,11 +66,13 @@ public class LibraryService{
         BeanUtils.copyProperties(book, bookToCreate);
         bookToCreate.setAuthor(author.get());
 //        return bookRepository.save(bookToCreate);
-        BookResponse bookResponse = new BookResponse();
         System.out.println("***" + bookRepository.save(bookToCreate).getAuthor().getId());
-        bookResponse.BookResponse(bookRepository.save(bookToCreate));
 
-        return bookResponse;
+        Book _book = bookRepository.save(bookToCreate);
+        bookRepository.flush();
+
+
+        return new BookResponseDto(_book);
 
     }
 

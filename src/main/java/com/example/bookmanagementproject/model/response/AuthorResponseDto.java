@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class AuthorResponse {
+public class AuthorResponseDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private List<BookResponse> bookResponses;
+    private List<BookResponseDto> bookResponses;
 }
