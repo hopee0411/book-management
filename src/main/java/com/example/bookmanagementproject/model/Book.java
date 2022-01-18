@@ -21,7 +21,7 @@ public class Book {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    @JsonManagedReference
+//    @JsonManagedReference
     private Author author;
 
     @JsonBackReference
